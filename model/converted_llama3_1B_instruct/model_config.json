@@ -1,0 +1,59 @@
+{
+    "model_config": { 
+        "model_name": "llama_converted",
+        "vocab_size": 128256,
+        "n_layers": 16,
+        "d_model": 2048,
+        "d_ff": 8192,
+        "n_heads": 32,
+        "n_kv_heads": 8,
+        "max_len": 8192,
+        "share_emb_out_proj": true,
+        "pad_id": 128255,
+        "eos_id": 128009,
+        "dtype": "bf16",
+        "attention_backend": "torch_native"
+    },
+    "tokenizer_config": {
+        "tokenizer": "bpe",
+        "pat_str": "(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\\r\\n\\p{L}\\p{N}]?\\p{L}+|\\p{N}{1,3}| ?[^\\s\\p{L}\\p{N}]+[\\r\\n]*|\\s*[\\r\\n]+|\\s+(?!\\S)|\\s+",
+        "num_reserved_special_tokens": 256,
+        "special_tokens": {
+            "bos": [
+                "<|begin_of_text|>",
+                128000
+            ],
+            "eos": [
+                "<|end_of_text|>",
+                128001
+            ],
+            "eot": [
+                "<|eot_id|>",
+                128009
+            ],
+            "start_header": [
+                "<|start_header_id|>",
+                128006
+            ],
+            "end_header": [
+                "<|end_header_id|>",
+                128007
+            ],
+            "pad": [
+                "<|pad_id|>",
+                128255
+            ]
+        },
+        "use_tiktoken": true
+    },
+    "generation_config": {
+        "strategy": "sample",
+        "top_p": 0.9,
+        "top_k": null,
+        "temperature": 0.6,
+        "repetition_penalty": null,
+        "max_decode_steps": 1024,
+        "system_message": "You're a helpful assistant.",
+        "generation_mode": "chat"
+    }
+}
