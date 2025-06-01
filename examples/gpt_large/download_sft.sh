@@ -1,0 +1,10 @@
+export HF_ENDPOINT=https://hf-mirror.com
+huggingface-cli download --resume-download --repo-type dataset "BAAI/Infinity-Instruct" --local-dir "data/Infinity-Instruct"
+huggingface-cli download --resume-download --repo-type dataset "HuggingFaceTB/smoltalk" --local-dir "data/smoltalk"
+huggingface-cli download --resume-download --include "en/*" --repo-type dataset "thomas-yanxin/MT-SFT-ShareGPT" --local-dir "data/MT-SFT-ShareGPT/"
+huggingface-cli download --resume-download --repo-type dataset "Magpie-Align/Magpie-Llama-3.1-Pro-MT-300K-Filtered" --local-dir "data/Magpie-Llama-3.1-Pro-MT-300K-Filtered/"
+huggingface-cli download --resume-download --repo-type dataset "teknium/OpenHermes-2.5" --local-dir "data/OpenHermes-2.5"
+huggingface-cli download --resume-download --repo-type dataset "Open-Orca/OpenOrca" --local-dir "data/OpenOrca"
+huggingface-cli download --resume-download --repo-type dataset "HuggingFaceH4/ultrachat_200k" --local-dir "data/ultrachat_200k"
+huggingface-cli download --resume-download --repo-type dataset "allenai/tulu-v2-sft-mixture" --local-dir "data/tulu-v2-sft-mixture"
+huggingface-cli download --resume-download --repo-type dataset "allenai/WildChat-1M" --local-dir "data/wildchat"

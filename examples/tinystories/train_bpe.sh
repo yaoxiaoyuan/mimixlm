@@ -1,0 +1,1 @@
+python mimixlm.py --task_name tinystories-small-bpe --mode train_bpe --model_path model/tinystories_small/init/ --raw_data_path data/TinyStories/data/train-00001-of-00004-5852b56a2bd28fd9.parquet --text_fields text --max_train_bpe_lines 400000 --min_bpe_pairs_occurrence 3 

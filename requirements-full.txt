@@ -1,0 +1,5 @@
+torch>=2.6.0
+torchvision>=0.21.0
+tiktoken>=0.8.0
+deepspeed==0.15.1
+transformers>=4.44

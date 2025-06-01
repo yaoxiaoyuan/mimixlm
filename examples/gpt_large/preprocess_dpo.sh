@@ -1,0 +1,1 @@
+python mimixlm.py --task process-ultrafeedback --mode preprocess --stage dpo --model_path model/gpt_large_sft --raw_data_path data/ultrafeedback_binarized_cleaned/data/train_prefs-00000-of-00001.parquet --processed_data_path data/ultrafeedback_processed --n_preprocess_workers 8 --max_len 2048 --n_split_shards 8

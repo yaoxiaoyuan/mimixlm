@@ -1,0 +1,1 @@
+python mimixlm.py --task process-sft-mix --mode preprocess --stage sft --model_path model/gpt_large/ --raw_data_path data/sft_mix/ --processed_data_path data/sft_mix_processed --n_preprocess_workers 8 --max_len 2048 --n_split_shards 32 --conversation_fields conversations

@@ -1,0 +1,88 @@
+{
+    "model_config": {
+        "model_name": "MimixV-large",
+        "vocab_size": 50256,
+        "max_len": 2048,
+        "share_emb_out_proj": true,
+        "pad_id": 50255,
+        "eos_id": 50251,
+        "dtype": "bf16",
+        "n_layers": 24,
+        "d_model": 1024,
+        "d_ff": 3072,
+        "n_heads": 8,
+        "n_kv_heads": 4,
+        "attention_backend": "torch_native",
+        "vision_config": {
+            "input_type": "image",
+            "n_layers": 24,
+            "d_model": 1024,
+            "d_ff": 4096,
+            "n_heads": 16,
+            "use_glu": false,
+            "use_attention_bias": true,
+            "layer_norm_type": "layer_norm",
+            "use_ffn_bias": true,
+            "attn_pos_embedding_type": "none",
+            "activation": "geluquick",
+            "norm_after_embedding": true,
+            "use_cls_embedding": true,
+            "use_patch_emb_bias": false,
+            "patch_size": 14,
+            "image_size": 224,
+            "resample": 3,
+            "rescale_factor": 0.00392156862745098,
+            "norm_mean": [
+                0.48145466,
+                0.4578275,
+                0.40821073
+              ],
+            "norm_std": [
+              0.26862954,
+              0.26130258,
+              0.27577711
+            ]
+        }
+    },
+    "tokenizer_config": {
+        "tokenizer": "bpe",
+        "pat_str": "'s|'t|'re|'ve|'m|'ll|'d| ?[\\p{L}]+| ?[\\p{N}]+| ?[^\\s\\p{L}\\p{N}]+|\\s+(?!\\S)|\\s+",
+        "num_reserved_special_tokens": 256,
+        "special_tokens": {
+            "bos": [
+                "<|begin_of_text|>",
+                50250
+            ],
+            "eos": [
+                "<|end_of_text|>",
+                50251
+            ],
+            "eot": [
+                "<|eot_id|>",
+                50252
+            ],
+            "start_header": [
+                "<|start_header_id|>",
+                50253
+            ],
+            "end_header": [
+                "<|end_header_id|>",
+                50254
+            ],
+            "pad": [
+                "<|pad_id|>",
+                50255
+            ]
+        },
+        "use_tiktoken": true
+    },
+    "generation_config": {
+        "strategy": "sample",
+        "top_p": 0.95,
+        "top_k": null,
+        "temperature": 0.95,
+        "repetition_penalty": null,
+        "max_decode_steps": 256,
+        "generation_mode": "raw"
+    }
+}

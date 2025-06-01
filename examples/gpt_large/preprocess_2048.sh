@@ -1,0 +1,1 @@
+python mimixlm.py --task_name process-fineweb-10b_wiki_2048 --mode preprocess --model_path model/gpt_large/init/ --raw_data_path data/fineweb/sample/10BT/  data/wiki_en/20231101.en/ --processed_data_path data/fineweb_processed_2048 --text_fields text --n_preprocess_workers 8 --max_len 2048 --stage pretrain --auto_concat --n_split_shards 256 

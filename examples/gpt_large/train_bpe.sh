@@ -1,0 +1,1 @@
+python mimixlm.py --task_name gpt-large-bpe --mode train_bpe --model_path model/gpt_large/init/ --raw_data_path data/fineweb/100BT/000_00000.parquet  --text_fields text --max_train_bpe_lines 150000 --min_bpe_pairs_occurrence 5
