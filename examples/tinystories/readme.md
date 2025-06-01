@@ -26,7 +26,7 @@
   - ![tinystories-small-pretrain_loss](tinystories-small-pretrain_loss.png)
 - **PPL evaluation**
   
-- PPL: 3.7
+  - PPL: 3.7
   
 - **Generated samples**
 
