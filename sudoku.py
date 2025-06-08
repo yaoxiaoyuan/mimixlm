@@ -34,9 +34,6 @@ class SudokuGUI:
         self.reset_puzzle()
         self.setup_keyboard_bindings()
 
-        
-    
-
 
     def init_ui(self):
         main_frame = tk.Frame(self.root, bg=self.colors["bg"])
@@ -46,9 +43,9 @@ class SudokuGUI:
         toolbar = tk.Frame(main_frame, bg=self.colors["bg"])
         toolbar.pack(pady=(0, 15))
         
-        self.create_button(toolbar, "Check", "#4CAF50", self.check).grid(row=0, column=0, padx=5)
-        self.create_button(toolbar, "Solve", "#2196F3", self.solve).grid(row=0, column=1, padx=5)
-        self.create_button(toolbar, "New", "#FF9800", self.new_game).grid(row=0, column=2, padx=5)
+        self.create_button(toolbar, "Generate puzzle", "#4CAF50", self.generate_puzzle).grid(row=0, column=0, padx=5)
+        self.create_button(toolbar, "Solve puzzle", "#2196F3", self.solve).grid(row=0, column=1, padx=5)
+        self.create_button(toolbar, "Clear all", "#FF9800", self.new_game).grid(row=0, column=2, padx=5)
 
         # 数独网格
         self.grid_canvas = tk.Canvas(main_frame, 
@@ -60,11 +57,60 @@ class SudokuGUI:
         self.draw_grid()
         self.create_cells()
 
-    def check(self):
-        if self.check_solution():
-            messagebox.showinfo("Check", "Success!")
-        else:
-            messagebox.showinfo("Check", "Failed!")
+    def generate_puzzle(self):
+        self.new_game()
+        try_cnt = 0
+        while True:
+            inputs = [""]
+            x = build_generation_inputs(self.model, inputs, self.tokenizer, self.device)[0]
+            with torch.no_grad():
+                gen_text = ""
+                for search_states in self.model.search(x, logits_processors=[]):
+                    search_states["text_buffer"] = []
+                    for ids in search_states["hypothesis"].cpu().numpy():
+                        search_states["text_buffer"].append(self.tokenizer.decode(ids))
+                    gen_text = search_states["text_buffer"][0]
+                    
+                    words = gen_text.split()
+                    
+                    if len(words) <= 81:
+                        i = (len(words) - 1) // 9
+                        j = (len(words) - 1) % 9
+                        num = int(words[-1])
+                        if num != 0:
+                            self.grid_canvas.itemconfig(self.cells[i][j], text=str(num))
+                        self.puzzle[i][j] = num
+
+                    else:
+                        i = (len(words) - 82) // 9
+                        j = (len(words) - 82) % 9
+                        num = int(words[-1])
+                        self.current_puzzle[i][j] = num
+                        if self.puzzle[i][j] == 0:
+                            self.grid_canvas.itemconfig(
+                            self.cells[i][j],
+                            text=str(self.current_puzzle[i][j]),
+                            fill=self.colors["input"]
+                            )
+                    self.update_highlight()
+                    self.root.update() 
+                    
+            try_cnt += 1
+            print(f"try generate {try_cnt} times, {gen_text}")
+            if self.solve(max_try_cnt=3):
+                print("Valid success!")
+                self.current_puzzle = [row[:] for row in self.puzzle]
+                for i in range(9):
+                    for j in range(9):
+                        if self.puzzle[i][j] == 0:
+                            self.grid_canvas.itemconfig(self.cells[i][j], text="")
+                self.update_highlight()
+                self.root.update()
+                messagebox.showinfo("Check", "Success!")
+                break
+            else:
+                print("Not valid!")
+                self.new_game()
 
     def setup_keyboard_bindings(self):
         # 绑定键盘事件
@@ -250,7 +296,7 @@ class SudokuGUI:
                                                                             
         return flag        
 
-    def solve(self):
+    def solve(self, max_try_cnt=20):
         self.clear_solve()
         self.root.update()
         
@@ -261,7 +307,7 @@ class SudokuGUI:
         x = build_generation_inputs(self.model, inputs, self.tokenizer, self.device)[0]
         tokens = [] 
         try_cnt = 0
-        while True:
+        while try_cnt < max_try_cnt:
             with torch.no_grad():
                 gen_text = ""
                 for search_states in self.model.search(x, logits_processors=[]):
@@ -286,14 +332,15 @@ class SudokuGUI:
                         self.root.update()
                         
             try_cnt += 1
-            print(f"try {try_cnt}, {gen_text}")
+            print(f"try solve {try_cnt} times, {gen_text}")
             if self.check_solution():
-                print("Success!")
-                break
+                print("Solve Success!")
+                messagebox.showinfo("Check", "Solve Success!")
+                return True
             else:
-                print("Failed!")
+                print("Solve Failed!")
                 self.clear_solve()
-            
+        return False    
 
     def clear_solve(self):
         self.current_puzzle = [row[:] for row in self.puzzle]
