@@ -1,6 +1,6 @@
 # MIMIXLM
 
-Mimixlm is a single-file Python implementation of large language models (LLM).
+Mimixlm is a single-file Python implementation of large language models (LLM) from scratch.
 
 ### Install
 
@@ -11,7 +11,7 @@ Mimixlm is a single-file Python implementation of large language models (LLM).
 
 ### Quick Start
 
-- **Download the model to the 'model' directory.** 
+- **Download a trained 0.3B model to the "model" folder.** 
   - Download Link: https://drive.google.com/drive/folders/1auGTlSVbFgtDhSiVLDMmjXejWN8cKs3k?usp=sharing
 - **Run the 'python  mimixlm.py --model_path <model_path> 'command, adding '--use_cuda' for GPU acceleration and ''--enable_gui' for graphical interface support as needed.** 
   - python  mimixlm.py --model_path <model_path>  *# CPU + CLI mode*  

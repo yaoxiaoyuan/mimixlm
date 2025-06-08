@@ -821,7 +821,7 @@ class SimpleTokenizer():
             list: Token IDs with optional special tokens. Preserves existing BOS/EOS
                   if already present at string boundaries.
         """
-        token_ids = [self.vocab.get(w, self.unk_id) for w in re.split("[ ]+", s)]
+        token_ids = [self.vocab.get(w, self.unk_id) for w in re.split("[ ]+", s) if w]
 
         if token_ids and token_ids[0] == self.bos_id and token_ids[-1] == self.eos_id:
             return token_ids
