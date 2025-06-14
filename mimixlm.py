@@ -998,16 +998,17 @@ class BPETokenizer(SimpleTokenizer):
         self.start_header_token, self.start_header_id = special_tokens["start_header"]
         self.end_header_token, self.end_header_id = special_tokens["end_header"]
         self.pad_token, self.pad_id = special_tokens["pad"]
+        if "think" in special_tokens:
+            self.think_token, self.think_id = special_tokens["think"]
+        if "end_of_think" in special_tokens:
+            self.end_think_token, self.end_think_id = special_tokens["end_of_think"]
+        if "answer" in special_tokens:
+            self.answer_token, self.answer_id = special_tokens["answer"]
+        if "end_of_answer" in special_tokens:
+            self.end_answer_token, self.end_answer_id = special_tokens["end_of_answer"]
 
         # Build special token ID mappings
-        self.id2special_tokens = {
-                self.bos_id: self.bos_token,
-                self.eos_id: self.eos_token,
-                self.eot_id: self.eot_token,
-                self.start_header_id: self.start_header_token,
-                self.end_header_id: self.end_header_token,
-                self.pad_id: self.pad_token
-                }
+        self.id2special_tokens = {token_id:token for token,token_id in special_tokens.values()}
 
         # Handle reserved special tokens
         idx = 0
@@ -1030,7 +1031,10 @@ class BPETokenizer(SimpleTokenizer):
             )
         else:
             self.model = BPE(self.pat_str, mergeable_ranks)
-
+            escaped_tokens = sorted([re.escape(token) for token in self.special_tokens_set],
+                           key=len, reverse=True)
+            self.special_token_pattern = re.compile("(" + "|".join(escaped_tokens) + ")")
+            
         # Calculate total vocabulary size
         self.n_words = self.num_base_tokens + self.num_reserved_special_tokens
 
@@ -1074,7 +1078,18 @@ class BPETokenizer(SimpleTokenizer):
             if self.use_tiktoken:
                 token_ids.extend(self.model.encode(substr, allowed_special=self.special_tokens_set))
             else:
-                token_ids.extend(self.model.encode(substr))
+                last_end = 0
+                for match in self.special_token_pattern.finditer(substr):
+                    start, end = match.span()
+                    if start > last_end:
+                        token_ids.extend(self.model.encode(substr[last_end:start]))
+                    
+                    special_token = match.group() 
+                    token_ids.append(self.special_tokens[special_token])
+                    last_end = end
+                
+                if last_end < len(substr):
+                    token_ids.extend(self.model.encode(substr[last_end:]))
 
         if token_ids and token_ids[0] == self.bos_id and token_ids[-1] == self.eos_id:
             return token_ids

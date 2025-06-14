@@ -4,9 +4,9 @@ Mimixlm is a single-file Python implementation of large language models (LLM) fr
 
 ### Install
 
-- **Basic installation** (inference only):  
+- **Basic installation** (can perform inference and basic training):  
   - pip install -r requirements.txt
-- **Training installation** (optimal performance):  
+- **Training installation** (optimize efficiency during training):  
   - pip install -r requirements-full.txt
 
 ### Quick Start
