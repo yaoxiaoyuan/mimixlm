@@ -67,7 +67,7 @@ def eval_exam(args):
         for data in read_data_shards(os.path.join(args.exam_data_path, f)):
             data_id = get_data_from_dict(data, ["id", "seq_id"], mode="first")
             question = get_data_from_dict(data, ["Question", "question"], mode="first")        
-            
+
             if not question:
                 continue
 
@@ -115,6 +115,8 @@ def eval_exam(args):
 
             if answer:
                 total[key] = total.get(key, 0) + 1
+                if key not in correct:
+                    correct[key] = 0
                 if model_ans and model_ans.lower() == answer.lower():
                     correct[key] = correct.get(key, 0) + 1
 
